@@ -10,10 +10,8 @@ import { access } from 'fs'
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID
 const CLIENT_SECRET = process.env.NEXT_PUBLIC_CLIENT_SECRET
 
-console.log(process.env.NEXT_PUBLIC_CLIENT_ID)
-console.log(process.env.NEXT_PUBLIC_CLIENT_SECRET)
-
-interface pageProps {}
+interface pageProps {
+}
 const page: FC<pageProps> = ({}) => {
   
   const [searchInput, setSearchInput] = useState("")
