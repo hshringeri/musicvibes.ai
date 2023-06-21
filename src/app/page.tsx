@@ -7,8 +7,11 @@ import { useState, useEffect, FC } from 'react'
 import AlbumCard  from './AlbumCard'
 import { access } from 'fs'
 
-const CLIENT_ID = process.env.CLIENT_ID
-const CLIENT_SECRET = process.env.CLIENT_SECRET
+const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID
+const CLIENT_SECRET = process.env.NEXT_PUBLIC_CLIENT_SECRET
+
+console.log(process.env.NEXT_PUBLIC_CLIENT_ID)
+console.log(process.env.NEXT_PUBLIC_CLIENT_SECRET)
 
 interface pageProps {}
 const page: FC<pageProps> = ({}) => {
