@@ -6,6 +6,7 @@ import ThoughtsLogo from './images/thoughts-logo3.jpeg'
 import { useState, useEffect, FC } from 'react'
 import AlbumCard  from './AlbumCard'
 import { access } from 'fs'
+import TrackCard from './SongCard'
 
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID
 const CLIENT_SECRET = process.env.NEXT_PUBLIC_CLIENT_SECRET
@@ -100,8 +101,8 @@ const page: FC<pageProps> = ({}) => {
             {tracks.map((track, i) => (
               <Col md="3">
             
-                <AlbumCard 
-                  albumName={track.name ? track.name : ""}
+                <TrackCard 
+                  name={track.name ? track.name : ""}
                   artist={track.artists[0].name ? track.artists[0].name : ""}
                   score={0}  
                   image={track.album.images[0].url}     
