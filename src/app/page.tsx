@@ -23,6 +23,7 @@ const page: FC<pageProps> = ({}) => {
   
 
   console.log(searchInput)
+  console.log(process.env.DB_CONN_STRING)
 
   useEffect(() => {
     // API Access Token

@@ -23,6 +23,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "lib/mongo/songReviews.js", "lib/mongo/index.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "lib/mongo/api/trackReview.ts", "lib/mongo/mongodb.ts"],
   "exclude": ["node_modules"]
 }
