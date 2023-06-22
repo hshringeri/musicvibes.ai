@@ -40,9 +40,6 @@ export default function TrackCard(props: TrackCardProps) {
 
         console.log(trackReview)
       
-
-        
-
         try {
             addTrackReview(trackReview)
         } catch (error) {
