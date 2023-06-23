@@ -6,8 +6,10 @@ import ThoughtsLogo from './images/thoughts-logo3.jpeg'
 import { useState, useEffect, FC, useRef } from 'react'
 import { CardHeaderProps } from 'react-bootstrap/esm/CardHeader'
 import { addTrackReview } from '../../lib/helper.js'
+import Link from 'next/link'
 
 interface TrackCardProps {
+    id: string | "",
     name: string | "",
     artist: string | "",
     score: number, 
@@ -16,7 +18,7 @@ interface TrackCardProps {
 
 }
 export default function TrackCard(props: TrackCardProps) {
-    const { name, artist, score, image } = props;
+    const { id, name, artist, score, image } = props;
     console.log(name)
 
     const [showPopup, setShowPopup] = useState(false);
@@ -27,12 +29,11 @@ export default function TrackCard(props: TrackCardProps) {
       }
     
       // Function to handle closing the popup
-      const handleClosePopup = async (text: string) => {
-        console.log(text)
-        setReview(text)
+    const handleClosePopup = async () => {
         setShowPopup(false);
-
+        console.log(showPopup)
         const trackReview = {
+            id: id,
             track: [name, artist, image],
             review: review, 
             score: 0     
@@ -46,8 +47,33 @@ export default function TrackCard(props: TrackCardProps) {
             console.error("Failed to add review:", error)
         }
 
-      }
-      {console.log(showPopup)}
+    }
+
+    const handleReview = (review: string) => {
+        setReview(review)
+    }
+
+    useEffect(() => {
+        console.log(showPopup); // Will reflect the updated value
+      }, [showPopup]);
+
+    const buttonStyle = {
+        background: 'none',
+        border: 'none',
+        padding: '0',
+        font: 'inherit',
+        cursor: 'pointer',
+    };
+
+    const viewTrackReviews = (id: string) => {
+        const data = {
+            track_id: id
+        }
+
+        const queryParams = new URLSearchParams(data).toString()
+        const url = `/trackReviews?${queryParams}`
+        window.location.href = url;
+    }
 
     return (
         <div>
@@ -63,12 +89,24 @@ export default function TrackCard(props: TrackCardProps) {
                                         type="text"
                                         className="px-12 py-3 w-full sm:px-8 sm:py-5 flex-1 text-zinc-200 bg-zinc-800 focus:bg-black rounded-full focus:outline-none focus:ring-[1px] focus:ring-green-700 placeholder:text-zinc-400"
                                         placeholder="Give your thoughts"
-                                        onBlur={(e) => {handleClosePopup(e.target.value)}}
+                                        value={review}
+                                        onChange={(e) => {handleReview(e.target.value)}}
                                     />  
+                                    <Button onClick={handleClosePopup} style={buttonStyle}>
+                                        <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
+                                            submit 
+                                        </div>
+                                    </Button>
+                                    <Button onClick={() => viewTrackReviews(id)} style={buttonStyle}>
+                                        <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
+                                            view reviews
+                                        </div>
+                                    </Button>
                                 </div>
                                 
                             )}
-                    </Card.Body>   
+                    </Card.Body> 
+                    
                 </Card> 
             </Button>
         </div>

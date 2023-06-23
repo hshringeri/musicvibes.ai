@@ -1,5 +1,5 @@
 import connectMongo  from '../../../lib/mongo/index.js'
-import { getTrackReviews, addTrackReview } from '../../../lib/mongo/controller.js'
+import { getTrackReviews, addTrackReview, getTrackReviewsbyId} from '../../../lib/mongo/trackReview/controller.js'
 
 export default function handler(req, res) {
    try { 
@@ -11,7 +11,8 @@ export default function handler(req, res) {
 
     switch(method) {
         case 'GET':
-            res.status(200).json({method, name: 'GET Request'})
+            console.log(req)
+            getTrackReviews(req, res)
             break
         case 'POST':
             addTrackReview(req,res)
