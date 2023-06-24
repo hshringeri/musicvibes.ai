@@ -67,7 +67,10 @@ export default function TrackCard(props: TrackCardProps) {
 
     const viewTrackReviews = (id: string) => {
         const data = {
-            track_id: id
+            track_id: id,
+            title: name,
+            artist: artist,
+            image: image
         }
 
         const queryParams = new URLSearchParams(data).toString()
@@ -97,6 +100,7 @@ export default function TrackCard(props: TrackCardProps) {
                                             submit 
                                         </div>
                                     </Button>
+                                    <br></br>
                                     <Button onClick={() => viewTrackReviews(id)} style={buttonStyle}>
                                         <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
                                             view reviews
