@@ -5,7 +5,8 @@ import { Container, InputGroup, FormControl, Button, Row, Card,} from 'react-boo
 import ThoughtsLogo from './images/thoughts-logo3.jpeg'
 import { useState, useEffect, FC, useRef } from 'react'
 import { CardHeaderProps } from 'react-bootstrap/esm/CardHeader'
-import { addTrackReview } from '../../lib/helper.js'
+import { addTrackReview } from '../../lib/helpers/trackReview'
+import {upsertTrack} from '../../lib/helpers/track'
 import Link from 'next/link'
 
 interface TrackCardProps {
@@ -32,6 +33,12 @@ export default function TrackCard(props: TrackCardProps) {
     const handleClosePopup = async () => {
         setShowPopup(false);
         console.log(showPopup)
+        
+        const track = {
+            id: id,
+            track_data: [name, artist, image],
+        }
+        
         const trackReview = {
             id: id,
             track: [name, artist, image],
@@ -43,9 +50,22 @@ export default function TrackCard(props: TrackCardProps) {
       
         try {
             addTrackReview(trackReview)
+            .then(() => {
+                console.log(score);
+                return upsertTrack(track);
+            })
+            .then(() => {
+                console.log("Track review and track added successfully");
+            })
+            .catch(error => {
+                console.error("Error occurred:", error);
+            });
+            
         } catch (error) {
-            console.error("Failed to add review:", error)
+            console.error("Failed to add track review:", error)
         }
+
+        
 
     }
 
