@@ -119,7 +119,8 @@ const page: FC<pageProps> = ({}) => {
               <Col md="3">
             
                 <AlbumCard 
-                  albumName={album.name ? album.name : ""}
+                  id={album.id ? album.id : ""}
+                  name={album.name ? album.name : ""}
                   artist={album.artists[0].name ? album.artists[0].name : ""}
                   score={0}  
                   image={album.images[0].url}     
@@ -132,11 +133,7 @@ const page: FC<pageProps> = ({}) => {
           
 
         </Row>
-  </Container>
-    
-      
-
-      
+      </Container>   
     </main>
   )
 }
