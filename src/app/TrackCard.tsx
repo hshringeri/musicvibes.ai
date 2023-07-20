@@ -106,6 +106,8 @@ export default function TrackCard(props: TrackCardProps) {
                     <Card.Body>
                         <Card.Title className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
                             {name}</Card.Title>
+                        <Card.Title className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
+                            {artist}</Card.Title>
                             {showPopup && (
                                 <div className="popup">
                                     <input

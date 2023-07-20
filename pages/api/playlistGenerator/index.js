@@ -1,5 +1,5 @@
 import connectMongo  from '../../../lib/mongo/index.js'
-import { addAlbum, getAlbums } from '../../../lib/mongo/album/controller.js'
+import { getPlaylist } from '../../../lib/mongo/playlistGenerator/controller.js'
 
 export default function handler(req, res) {
    try { 
@@ -11,13 +11,14 @@ export default function handler(req, res) {
 
     switch(method) {
         case 'GET':
-            getAlbums(req, res)
+            console.log(req)
+            getPlaylist(req,res)
             break
         case 'POST':
             res.status(200).json({method, name: 'POST Request'})
             break
         case 'PUT':
-            addAlbum(req,res)
+            res.status(200).json({method, name: 'PUT Request'})
             break
         case 'DELETE':
             res.status(200).json({method, name: 'DELETE Request'})
