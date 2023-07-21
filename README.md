@@ -1,3 +1,5 @@
+Previously ThoughtGPT
+
 STILL IN PROGRESS
 
 Using spotify dev API.
