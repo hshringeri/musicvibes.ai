@@ -11,9 +11,7 @@ import TrackCard from './TrackCard'
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID
 const CLIENT_SECRET = process.env.NEXT_PUBLIC_CLIENT_SECRET
 
-interface pageProps {
-}
-const page: FC<pageProps> = ({}) => {
+const Page: FC = () => {
   
   const [searchInput, setSearchInput] = useState("")
   const [accessToken, setAccessToken] = useState("")
@@ -108,7 +106,7 @@ const page: FC<pageProps> = ({}) => {
         <Row className= "mx-2 row rows-cols-4">          
           <h1 style={{color: 'black'}} className="z-20 w-full max-w-5xl items-center justify-between font-mono text-5xl lg:flex">tracks</h1>
             {tracks.map((track, i) => (
-              <Col md="3">
+              <Col md="3" key={i}>
                 
                 <TrackCard 
                   id={track.id ? track.id : ""}
@@ -124,7 +122,7 @@ const page: FC<pageProps> = ({}) => {
             <br></br>
             <h1 style={{color: 'black'}} className="z-20 w-full max-w-5xl items-center justify-between font-mono text-5xl lg:flex">albums</h1>
             {albums.map((album, i) => (
-              <Col md="3">
+              <Col md="3" key={i}>
             
                 <AlbumCard 
                   id={album.id ? album.id : ""}
@@ -143,4 +141,4 @@ const page: FC<pageProps> = ({}) => {
   )
 }
 
-export default page
+export default Page

@@ -6,7 +6,7 @@ import ThoughtsLogo from '../images/thoughts-logo3.jpeg'
 import { useState, useEffect, FC } from 'react'
 const axios = require('axios');
 import { access } from 'fs'
-import { getPlaylist } from "../../../lib/helpers/playlistGenerator.js"
+import { getPlaylist, createPlaylist } from "../../../lib/helpers/playlistGenerator.js"
 import TrackCard from '../TrackCard'
 import { useSearchParams } from 'next/navigation'
 import { getAccessToken } from '../../../lib/helpers/accessToken'
@@ -20,57 +20,85 @@ const redirect_uri = 'http://localhost:3000/playlistGenerator'
 
 interface pageProps {
 }
-const page: FC<pageProps> = ({}) => {
+const Page: FC<pageProps> = ({}) => {
     const [search, setSearch] = useState("")
     const [songs, setSongs] = useState([])
     const [accessToken, setAccessToken] = useState("")
+    const [authorizedAccessToken, setAuthorizedAccessToken] = useState("")
     const [spotifyTracks, setSpotifyTracks] = useState<any[]>([])
     const [userId, setUserId] = useState("")
-    const [userData, setUserData] = useState<any>("")
-
 
     console.log(accessToken)
-    console.log(userData)
+    console.log(authorizedAccessToken)
+    console.log(userId)
 
     const searchParams = useSearchParams()
     const code = searchParams?.get('code')
 
 
     console.log(code)
-    const getId = () => {
+    const getAuthorizedAccessToken = () => {
       console.log("hi")
-      var authParams = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: 'grant_type=client_credentials&client_id=' + CLIENT_ID + '&client_secret=' + CLIENT_SECRET
-  
-      } 
-      fetch('https://accounts.spotify.com/api/token', authParams)
-      .then(result => result.json())
-      .then(async data => {
-        
-        console.log(data.access_token)
-        setAccessToken(data.access_token)
-        const params = {
-          method: 'GET',
+        const authOptions = {
+          method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + accessToken
-          }
-        };
-        
-        const userData = await fetch('https://api.spotify.com/v1/me', params)
-          .then(response => response.json())
-          .then(data => {
-            console.log("yeahh")
-            setUserData("hi")
-          });
+            'Authorization': 'Basic ' + Buffer.from(CLIENT_ID + ':' + CLIENT_SECRET).toString('base64'),
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: new URLSearchParams({
+            code: code || "",
+            redirect_uri: redirect_uri,
+            grant_type: 'authorization_code'
+          })
+      };
 
+      const url = 'https://accounts.spotify.com/api/token';
+
+      fetch(url, authOptions)
+      .then(response => response.json())
+      .then(data => {
+          console.log("GEEEEE")
+          console.log(data);
+          const access_token = data.access_token
+          console.log(access_token)
+          // Use the data returned from the API here
+          console.log("jeez kid")
+          console.log(access_token)
+    
+          setAuthorizedAccessToken(access_token)
       })
+      .catch(error => {
+          console.error('Error:', error);
+      });
 
     }
+
+    const getId = async () => {
+      console.log(authorizedAccessToken)
+      const params = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + authorizedAccessToken
+        }
+      };
+
+    console.log(authorizedAccessToken)
+    const me =  await fetch('https://api.spotify.com/v1/me', params)
+      .then(response => response.json())
+      .then(data => {
+            console.log(data);
+            console.log(data.id);
+            setUserId(data.id)
+            
+        }); 
+
+    }
+
+    useEffect(() => {
+      console.log(authorizedAccessToken)
+      getId()
+    },[authorizedAccessToken])
 
 
     useEffect(() => {
@@ -85,8 +113,16 @@ const page: FC<pageProps> = ({}) => {
         } 
         fetch('https://accounts.spotify.com/api/token', authParams)
         .then(result => result.json())
-        .then(data => setAccessToken(data.access_token))
-      }, [])
+        .then(data => {
+          if (!authorizedAccessToken) {
+            setAccessToken(data.access_token)
+          } else {
+            setAuthorizedAccessToken(data.access_token)
+          }
+          })
+
+            
+    }, [])
 
 
       const fetchSongs = async () => {
@@ -108,6 +144,10 @@ const page: FC<pageProps> = ({}) => {
         setSpotifyTracks(tracks);
       };
 
+      useEffect(() => {
+        fetchSongs()
+      },[songs])
+
 
     const getTrack = async (track: string) => {
         const params = {
@@ -126,8 +166,7 @@ const page: FC<pageProps> = ({}) => {
             return data.tracks.items[0];
           });
 
-        const me =  await fetch('https://api.spotify.com/v1/me', params)
-        console.log(me)
+        
       
         return searchData;
     };
@@ -140,13 +179,7 @@ const page: FC<pageProps> = ({}) => {
         setSongs(playlist[0])
     }
 
-    useEffect(() => {
-      fetchSongs();
-    }, [songs]);
-
-    useEffect(() => {
-        console.log(userData)
-    }, [userData])
+    console.log(spotifyTracks)
 
     const buttonStyle = {
         background: 'none',
@@ -158,32 +191,40 @@ const page: FC<pageProps> = ({}) => {
 
 
     const login = () => {
-      const scope = 'user-read-private user-read-email'
+      const scope = 'user-read-private user-read-email playlist-modify-public playlist-modify-private'
       let url = 'https://accounts.spotify.com/authorize?'
       url += 'client_id=' + CLIENT_ID
       url += '&response_type=code'
       url += "&redirect_uri=" + encodeURI(redirect_uri)
       url += "&scope=" + scope
       window.location.href = url
+
+      
+    }
+
+    const onLogin = () => {
+      login()
     }
 
     const addToPlaylist = () => {
-      login()
-      const accessToken = getAccessToken(code)
-      console.log("hi")
-      
+      if(!authorizedAccessToken)
+        getAuthorizedAccessToken()
 
-
+      const playlistData = {
+        user_id: userId,
+        access_token: authorizedAccessToken,
+        playlist_songs: spotifyTracks,
+        playlist_title: search
+      }
+      console.log(playlistData)
+      createPlaylist(playlistData)
 
     }
-   
-   
-
 
     return (
         <main className="flex min-h-screen flex-col items-center justify-between p-24">
             <div className="relative flex flex-col items-center before:absolute before:h-[300px] before:w-[900px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px]">
-                <h1 style={{color: 'black'}} className="z-20 w-full max-w-5xl items-center justify-between font-mono text-5xl lg:flex">create mood based playlist</h1>
+                <h1 style={{color: 'black'}} className="z-20 w-full max-w-5xl items-center justify-between font-mono text-5xl lg:flex">whats the vibe</h1>
                 <Image
                 className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert rounded-full"
                 src={ThoughtsLogo}
@@ -197,7 +238,7 @@ const page: FC<pageProps> = ({}) => {
             <input
                 type="text"
                 className="px-10 py-1 w-full sm:px-5 sm:py-3 flex-1 text-zinc-200 bg-zinc-800 focus:bg-black rounded-full focus:outline-none focus:ring-[1px] focus:ring-green-700 placeholder:text-zinc-400"
-                placeholder="mood for your playlist"
+                placeholder="vibe for the ride"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
 
@@ -220,22 +261,24 @@ const page: FC<pageProps> = ({}) => {
             console.log(spotifyTrack)
             console.log(i)
             console.log(spotifyTrack)
-            return (
-              <Col md="3" key={i}>
-                <TrackCard 
-                    id={spotifyTrack.id ? spotifyTrack.id : ""}
-                    name={spotifyTrack.name ? spotifyTrack.name : ""}
-                    artist={spotifyTrack.artists[0].name ? spotifyTrack.artists[0].name : ""}
-                    score={0}  
-                    image={spotifyTrack.album.images[0].url}     
-                />
-                </Col>
-              );
+            if (spotifyTrack)
+              return (
+                <Col md="3" key={i}>
+                  <TrackCard 
+                      id={spotifyTrack.id ? spotifyTrack.id : ""}
+                      name={spotifyTrack.name ? spotifyTrack.name : ""}
+                      artist={spotifyTrack.artists[0].name ? spotifyTrack.artists[0].name : ""}
+                      score={0}  
+                      image={spotifyTrack.album.images[0].url}     
+                  />
+                  </Col>
+                );
   
         })}
           
         </Row>
         </Container>
+        <Button onClick={onLogin}>login</Button>
         <Button onClick={addToPlaylist}>add to playlist</Button>
 
         </main>
@@ -243,4 +286,4 @@ const page: FC<pageProps> = ({}) => {
     )
 }
 
-export default page;
+export default Page;

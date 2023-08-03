@@ -8,16 +8,13 @@ import { access } from 'fs'
 import { getAlbumReviews } from '../../../lib/helpers/albumReview'
 import { getAlbum } from '../../../lib/helpers/album'
 import { useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/router';
 
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID
 const CLIENT_SECRET = process.env.NEXT_PUBLIC_CLIENT_SECRET
 
-interface pageProps {
-    album_id: string
-    image: string
-}
 
-const Page: FC<pageProps> = ({}: pageProps) => {
+const Page: FC = () => {
     const [albumReviews, setAlbumReviews] = useState<any[]>([]);
     const [albumScore, setAlbumScore] = useState<String>("")
     const [albumAiReview, setAlbumAiReview] = useState<String>("")
@@ -42,6 +39,7 @@ const Page: FC<pageProps> = ({}: pageProps) => {
         const fetchAlbum = async () => {
             try {
                 const album = await getAlbum(id);
+                console.log(album)
                 setAlbumScore(album.score);
                 setAlbumAiReview(album.ai_review)
             } catch (error) {

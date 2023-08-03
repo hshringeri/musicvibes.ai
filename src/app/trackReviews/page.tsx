@@ -12,12 +12,7 @@ import { useSearchParams } from 'next/navigation'
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID
 const CLIENT_SECRET = process.env.NEXT_PUBLIC_CLIENT_SECRET
 
-interface pageProps {
-    track_id: string
-    image: string
-}
-
-const Page: FC<pageProps> = ({}: pageProps) => {
+const Page: FC = () => {
     const [trackReviews, setTrackReviews] = useState<any[]>([]);
     const [trackScore, setTrackScore] = useState<String>("")
     const [trackAiReview, setTrackAiReview] = useState<String>("")

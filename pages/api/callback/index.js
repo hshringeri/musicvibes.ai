@@ -1,4 +1,4 @@
-import { reqAcessToken } from "../../../lib/mongo/callback/controller"
+import { reqAccessToken } from "../../../lib/mongo/callback/controller"
 
 export default function handler(req, res) {
     try { 
@@ -10,8 +10,10 @@ export default function handler(req, res) {
  
      switch(method) {
          case 'GET':
+            console.log("hi")
              console.log(req)
-             reqAcessToken(req, res)
+             reqAccessToken(req, res)
+             console.log("we dem bys")
              break
          case 'POST':
              res.status(200).json({method, name: 'POST Request'})
@@ -28,5 +30,4 @@ export default function handler(req, res) {
      }
  
      
- 
  }
