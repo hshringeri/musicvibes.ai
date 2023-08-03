@@ -1,6 +1,6 @@
 Previously ThoughtGPT
 
-Deployed link still a bit faulty, working on it
+Deployed link still a bit faulty, working on it (the album review part)
 
 Using spotify dev API.
 https://developer.spotify.com/documentation/web-api
