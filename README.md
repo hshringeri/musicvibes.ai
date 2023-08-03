@@ -1,6 +1,6 @@
 Previously ThoughtGPT
 
-STILL IN PROGRESS
+Deployed link still a bit faulty, working on it
 
 Using spotify dev API.
 https://developer.spotify.com/documentation/web-api
