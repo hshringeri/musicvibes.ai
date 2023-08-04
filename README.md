@@ -1,6 +1,6 @@
 Previously ThoughtGPT
 
-Deployed link still a bit faulty, working on it (the album review part)
+Deployed link still a bit faulty, working on it (504 error on fetch playlists for playlist generation)
 
 Using spotify dev API.
 https://developer.spotify.com/documentation/web-api
