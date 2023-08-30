@@ -52,6 +52,7 @@ export default function AlbumCard(props: AlbumCardProps) {
             addAlbumReview(albumReview)
             .then(() => {
                 console.log(score);
+                console.log(album)
                 return upsertAlbum(album);
             })
             .then(() => {

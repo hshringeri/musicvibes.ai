@@ -11,8 +11,10 @@ import { useSearchParams } from 'next/navigation'
 
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID
 const CLIENT_SECRET = process.env.NEXT_PUBLIC_CLIENT_SECRET
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
 
 const Page: FC = () => {
+    console.log(BASE_URL)
     const [trackReviews, setTrackReviews] = useState<any[]>([]);
     const [trackScore, setTrackScore] = useState<String>("")
     const [trackAiReview, setTrackAiReview] = useState<String>("")
@@ -27,6 +29,8 @@ const Page: FC = () => {
     useEffect(() => {
         const fetchTrackReviews = async () => {
             try {
+                console.log("Cool")
+                console.log("url: " + BASE_URL)
                 console.log("hi")
                 const reviews = await getTrackReviews(id);
                 console.log("hi")

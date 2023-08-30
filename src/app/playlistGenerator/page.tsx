@@ -2,7 +2,7 @@
 import Image from 'next/image'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Container, InputGroup, FormControl, Button, Row, Card, Col } from 'react-bootstrap'
-import ThoughtsLogo from '../images/thoughts-logo3.jpeg'
+import ThoughtsLogo from '../images/DALL·E 2023-08-03 23.12.54 - cyberpunk dj.png'
 import { useState, useEffect, FC } from 'react'
 const axios = require('axios');
 import { access } from 'fs'
@@ -14,7 +14,8 @@ import { getAccessToken } from '../../../lib/helpers/accessToken'
 
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID
 const CLIENT_SECRET = process.env.NEXT_PUBLIC_CLIENT_SECRET
-const redirect_uri = 'http://localhost:3000/playlistGenerator'
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
+const redirect_uri = BASE_URL + '/playlistGenerator'
 
 
 
@@ -229,7 +230,7 @@ const Page: FC<pageProps> = ({}) => {
                 className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert rounded-full"
                 src={ThoughtsLogo}
                 alt="Next.js Logo"
-                width={180}
+                width={400}
                 height={37}
                 priority
                 />

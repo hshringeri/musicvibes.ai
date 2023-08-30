@@ -2,7 +2,7 @@
 import Image from 'next/image'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Container, InputGroup, FormControl, Button, Row, Card, Col } from 'react-bootstrap'
-import ThoughtsLogo from './images/thoughts-logo3.jpeg'
+import musicLogo from './images/musicLogo.jpeg'
 import { useState, useEffect, FC } from 'react'
 import AlbumCard  from './AlbumCard'
 import { access } from 'fs'
@@ -12,6 +12,7 @@ const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID
 const CLIENT_SECRET = process.env.NEXT_PUBLIC_CLIENT_SECRET
 
 const Page: FC = () => {
+  console.log(CLIENT_ID)
   
   const [searchInput, setSearchInput] = useState("")
   const [accessToken, setAccessToken] = useState("")
@@ -22,6 +23,7 @@ const Page: FC = () => {
 
   console.log(searchInput)
   console.log(process.env.DB_CONN_STRING)
+  
 
   useEffect(() => {
     // API Access Token
@@ -84,18 +86,18 @@ const Page: FC = () => {
 
       <div className="relative flex flex-col items-center before:absolute before:h-[300px] before:w-[900px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px]">
         <Image
-         className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert rounded-full"
-          src={ThoughtsLogo}
+         className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70]  rounded-full"
+          src={musicLogo}
           alt="Next.js Logo"
-          width={180}
-          height={37}
+          width={400}
+          height={400}
           priority
         />
         <br></br>
         <input
             type="text"
             className="px-10 py-1 w-full sm:px-5 sm:py-3 flex-1 text-zinc-200 bg-zinc-800 focus:bg-black rounded-full focus:outline-none focus:ring-[1px] focus:ring-green-700 placeholder:text-zinc-400"
-            placeholder="Search for Artist"
+            placeholder="Search anything..."
             value={searchInput}
             onChange={(e) => search(e.target.value)}
 

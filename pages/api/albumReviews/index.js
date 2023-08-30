@@ -1,7 +1,28 @@
 import connectMongo  from '../../../lib/mongo/index.js'
 import { getAlbumReviews, addAlbumReview, } from '../../../lib/mongo/albumReview/controller.js'
 
-export default function handler(req, res) {
+import Cors from 'cors';
+import { run } from 'node:test';
+
+// Initializing the cors middleware
+const cors = Cors({
+    origin: 'https://music-vibes-brown.vercel.app',
+  methods: ['GET', 'HEAD', 'POST', 'PUT', 'DELETE'],
+});
+
+// Helper method to run middleware manually
+const runMiddleware = (req, res, fn) => {
+  return new Promise((resolve, reject) => {
+    fn(req, res, (result) => {
+      if (result instanceof Error) {
+        return reject(result);
+      }
+      return resolve(result);
+    });
+  });
+}; 
+export default async function handler(req, res) {
+    await runMiddleware(req, res, cors)
    try { 
     connectMongo()
    } catch(error) {

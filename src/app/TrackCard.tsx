@@ -49,6 +49,7 @@ export default function TrackCard(props: TrackCardProps) {
         console.log(trackReview)
       
         try {
+            console.log("added aweeessssommeee")
             addTrackReview(trackReview)
             .then(() => {
                 console.log(score);
@@ -92,7 +93,7 @@ export default function TrackCard(props: TrackCardProps) {
             artist: artist,
             image: image
         }
-
+        console.log("awesommmmme")
         const queryParams = new URLSearchParams(data).toString()
         const url = `/trackReviews?${queryParams}`
         window.location.href = url;

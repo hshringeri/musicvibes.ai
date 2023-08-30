@@ -15,6 +15,7 @@ const CLIENT_SECRET = process.env.NEXT_PUBLIC_CLIENT_SECRET
 
 
 const Page: FC = () => {
+    
     const [albumReviews, setAlbumReviews] = useState<any[]>([]);
     const [albumScore, setAlbumScore] = useState<String>("")
     const [albumAiReview, setAlbumAiReview] = useState<String>("")
@@ -25,12 +26,16 @@ const Page: FC = () => {
     const title = searchParams?.get('title')
     const artist= searchParams?.get('artist')
     console.log(id)
+    console.log(albumScore)
+    console.log(title)
 
     useEffect(() => {
         const fetchAlbumReviews = async () => {
             try {
                 const reviews = await getAlbumReviews(id);
+                console.log(reviews)
                 setAlbumReviews(reviews);
+                console.log(albumReviews)
             } catch (error) {
                 console.error('Failed to fetch track reviews:', error);
             }
@@ -39,6 +44,7 @@ const Page: FC = () => {
         const fetchAlbum = async () => {
             try {
                 const album = await getAlbum(id);
+                console.log(album)
                 console.log(album)
                 setAlbumScore(album.score);
                 setAlbumAiReview(album.ai_review)
@@ -50,6 +56,8 @@ const Page: FC = () => {
         fetchAlbumReviews();
         fetchAlbum()
         }, [id]);
+
+        const roundedAlbumScore = Math.ceil(Number(albumScore))
 
     return (
         <main className=" bg-white flex min-h-screen flex-col items-center justify-between p-24">
@@ -64,7 +72,7 @@ const Page: FC = () => {
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <h3 style={{ fontStyle: 'italic' }}>{albumAiReview}</h3>
                 <br></br>
-                <h1 style={{ marginBottom: '30px', border: Number(albumScore) > 75 ? '2px solid green' : '2px solid black', borderRadius: '50%', padding: '20px', width: '120px', height: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{albumScore}</h1>
+                <h1 style={{ marginBottom: '30px', border: Number(roundedAlbumScore) > 75 ? '2px solid green' : '2px solid black', borderRadius: '50%', padding: '20px', width: '120px', height: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{roundedAlbumScore}</h1>
             </div>
 
         <Container className="mt-8">

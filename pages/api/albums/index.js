@@ -1,7 +1,27 @@
 import connectMongo  from '../../../lib/mongo/index.js'
-import { getAlbumReviews, addAlbumReview,} from '../../../lib/mongo/albumReview/controller.js'
+import { getAlbums, addAlbum} from '../../../lib/mongo/album/controller.js'
 
-export default function handler(req, res) {
+import Cors from 'cors';
+
+// Initializing the cors middleware
+const cors = Cors({
+    origin: 'https://music-vibes-brown.vercel.app',
+  methods: ['GET', 'HEAD', 'POST', 'PUT', 'DELETE'],
+});
+
+// Helper method to run middleware manually
+const runMiddleware = (req, res, fn) => {
+  return new Promise((resolve, reject) => {
+    fn(req, res, (result) => {
+      if (result instanceof Error) {
+        return reject(result);
+      }
+      return resolve(result);
+    });
+  });
+};
+export default async function handler(req, res) {
+    await runMiddleware(req, res, cors);
    try { 
     connectMongo()
    } catch(error) {
@@ -12,13 +32,13 @@ export default function handler(req, res) {
     switch(method) {
         case 'GET':
             console.log(req)
-            getAlbumReviews(req, res)
+            getAlbums(req, res)
             break
         case 'POST':
-            addAlbumReview(req,res)
+            res.status(200).json({method, name: 'POST Request'})
             break
         case 'PUT':
-            res.status(200).json({method, name: 'PUT Request'})
+            addAlbum(req,res)
             break
         case 'DELETE':
             res.status(200).json({method, name: 'DELETE Request'})
